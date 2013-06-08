@@ -155,6 +155,7 @@ class Screen:
         self.kernel = kernel
         self.initialized = False
         self.active = False
+        self.screen_manager = None;
 
     def initialize(self):
         """
@@ -205,7 +206,7 @@ class Screen:
 
         return True
 
-    def pump_event(self, event):
+    def handle_event(self, event):
         """
         Handles a single event pumped from the system event pump
         """
@@ -235,6 +236,7 @@ class ScreenManager:
             return
 
         self.screens[screen.name] = screen
+        screen.screen_manager = self
 
         logging.info(
             "(Screen Manager) Screen '" + screen.name + "' registered.")
