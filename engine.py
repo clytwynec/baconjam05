@@ -98,8 +98,9 @@ class ImageManager:
         else:
             image = pygame.image.load(os.path.join(
                 Config.asset_path, "images", filename))
-            image = image.convert(self.mKernel.DisplaySurface())
 
+            image = image.convert(self.mKernel.DisplaySurface())
+            
             if (transparent):
                 image.set_colorkey(Colors.TRANSPARENT)
                 image.set_alpha(255, pygame.locals.RLEACCEL)
