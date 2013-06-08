@@ -73,7 +73,7 @@ class GameMain(engine.Screen):
 
             # Also make sure we drag the current garmet around if its set
             if self.current_garmet:
-                self.current_garmet.position = (event.pos)
+                self.current_garmet.position = [event.pos[0], event.pos[1]]
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             for garmet in self.garmets:

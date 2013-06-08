@@ -1,4 +1,4 @@
-import pygame
+import pygame, math, random
 
 class Garmet:
     def __init__(self, kernel, screen):
@@ -13,7 +13,7 @@ class Garmet:
         self.color = pygame.Color(0, 0, 0)
 
         # Properties Go Here
-        self.position = (0, 0)
+        self.position = [0, 0]
 
         self.falling = True
         self.gravity = 1
