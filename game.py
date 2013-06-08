@@ -52,21 +52,33 @@ class Bins:
             'Biohazard'
         ]
 
-        self.bin_images = [
-            # surface
-            # surface
-            # surface
-        ]
+        light_image, light_rect = kernel.image_manager.load("lights.bmp", True)
+        dark_image, dark_rect = kernel.image_manager.load("darks.bmp", True)
+        bio_image, bio_rect = kernel.image_manager.load("biohazard.bmp", True)
 
-        self.bin_rects = [
-            # pygame.Rect
-            # pygame.Rect
-            # pygame.Rect
+        self.bin_images = {
+            'Lights': light_image,
+            'Darks': dark_image,
+            'Biohazard': bio_image,
+        }
+
+        self.bin_rects = {
+            'Lights': light_rect,
+            'Darks': dark_rect,
+            'Biohazard': bio_rect,
+        }
+
+        self.bin_x_positions = [
+            100,
+            300,
+            500
         ]
 
         # How long we've stayed in position
         self.ticks = 0
         self.randomize_time = 1500
+
+        self.y_position = 450
 
     def spin(self):
         # Randomize the order of the bins
@@ -80,7 +92,19 @@ class Bins:
         pass
 
     def draw(self, surface):
-        pass
+        for (bin, x_position) in zip(self.bins, self.bin_x_positions):
+            image = self.bin_images[bin]
+            rect = self.bin_rects[bin]
+
+            surface.blit(
+                image,
+                pygame.Rect(
+                    x_position,
+                    self.y_position,
+                    rect.width,
+                    rect.height
+                )
+            )
 
     pass
 
