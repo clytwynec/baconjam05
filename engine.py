@@ -26,7 +26,7 @@ class Kernel:
     some basic logic so we can manage them easily
     """
     def __init__(self, **kwargs):
-        logfilename = kwargs.get('logfilename', 'robo.log')
+        logfilename = kwargs.get('logfilename', 'game.log')
         loglevel = kwargs.get('loglevel', logging.DEBUG)
 
         logging.basicConfig(filename=logfilename, level=loglevel)
