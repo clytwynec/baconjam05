@@ -17,6 +17,8 @@ class Garmet:
 
         self.falling = True
         self.gravity = 1
+        self.velocity = 0
+
 
         pass
 
@@ -26,7 +28,14 @@ class Garmet:
 
     def update(self, delta):
         # Update our position if we're falling
-        pass
+        if self.falling:
+            self.velocity += self.gravity
+            self.position[1] += self.velocity
+
+        if self.position[1] > 600:
+            self.position[0] = 400
+            self.position[1] = 0
+            self.velocity = 0
 
     def draw(self, surface):
         if self.image and self.rect:
@@ -77,6 +86,8 @@ class Bins:
         # How long we've stayed in position
         self.ticks = 0
         self.randomize_time = 1500
+        self.move_counter = 0
+        self.y_position = 450
 
         self.y_position = 450
 
@@ -89,7 +100,27 @@ class Bins:
         pass
 
     def update(self, delta):
-        pass
+        self.ticks += delta
+
+        if self.ticks >= self.randomize_time:
+            max_counter = 20
+
+            t = (self.move_counter / float(max_counter)) * math.pi
+
+            midpoint = (((max_counter / 2) - 1) / float(max_counter)) * math.pi
+
+            if t != (math.pi / 2):
+                movement = math.tan(t) / math.tan(midpoint)
+                self.y_position += 100 * movement
+
+            if self.move_counter == max_counter / 2:
+                self.spin()
+
+            if self.move_counter >= max_counter:
+                self.move_counter = 0
+                self.ticks = 0
+
+            self.move_counter += 1
 
     def draw(self, surface):
         for (bin, x_position) in zip(self.bins, self.bin_x_positions):
