@@ -75,11 +75,13 @@ class Kernel:
 
         self.display_surface.fill(Colors.BLUE)
 
-    def process_system_event(self):
+    def process_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif self.screen_manager.active_screen:
+                self.screen_manager.active_screen.handle_event(event)
 
 ##############################################################
 
