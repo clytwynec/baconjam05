@@ -5,12 +5,12 @@ import os
 import pygame
 import pygame.locals
 
-###################################################
+##############################################################
 
 class Config:
     asset_path = os.path.join("assets")
 
-###################################################
+##############################################################
 
 class Colors:
     TRANSPARENT = (255, 0, 255)
@@ -23,11 +23,12 @@ class Colors:
     WHITE = (255, 255, 255)
     YELLOW = (255, 255, 0)
 
-###################################################
+##############################################################
 
 class Kernel:
+
     """
-    Simple management interface for all of the 
+    Simple management interface for all of the
     subsystems of the engine.  Just passes through
     some basic logic so we can manage them easily
     """
@@ -69,7 +70,6 @@ class Kernel:
 
         return self.display_surface
 
-
     def flip_display(self):
         pygame.display.flip()
 
@@ -81,9 +81,10 @@ class Kernel:
                 pygame.quit()
                 sys.exit()
 
-###################################################
+##############################################################
 
 class ImageManager:
+
     """
     Simple utility for loading and cacheing images
     """
@@ -91,23 +92,27 @@ class ImageManager:
         self.loaded_images = {}
         self.kernel = kernel
 
-    def load(self, filename, transparent = True):
+    def load(self, filename, transparent=True):
         if (filename in self.loaded_images):
             return self.loaded_image[filename], self.loaded_images[filename].get_rect()
         else:
-            image = pygame.image.load(os.path.join(Config.asset_path, "images", filename))
+            image = pygame.image.load(os.path.join(
+                Config.asset_path, "images", filename))
             image = image.convert(self.mKernel.DisplaySurface())
 
             if (transparent):
-                image.set_colorkey(Colors.TRANSPARENT);
+                image.set_colorkey(Colors.TRANSPARENT)
                 image.set_alpha(255, pygame.locals.RLEACCEL)
-            
+
             self.loaded_images[filename] = image
             return image, image.get_rect()
 
-###################################################
+
+##############################################################
+
 
 class SoundManager:
+
     """
     Simple utility class for loading and cacheing sounds
     """
@@ -119,19 +124,23 @@ class SoundManager:
         if (filename in self.loaded_sounds):
             return self.loaded_sounds[filename]
         else:
-            sound = pygame.mixer.Sound(os.path.join(Config.asset_path, "sounds", filename))
+            sound = pygame.mixer.Sound(os.path.join(
+                Config.asset_path, "sounds", filename))
             self.loaded_sounds[filename] = sound
             return sound
 
-###################################################
+
+##############################################################
+
 
 class Screen:
+
     """
     A Screen represents a single screen of the game.
     The functionality of the class essentially acts
     as an interface to the common actions that you
     need throughout a screen of the game.  You are
-    expected to subclass this to make individual 
+    expected to subclass this to make individual
     sceens for your game.
     """
     def __init__(self, kernel, name):
@@ -188,7 +197,7 @@ class Screen:
         """
         Resume this state without re-initializing all of the data.
         """
-        
+
         logging.info("(Screen " + self.name + "'') resuming")
 
         self.active = True
@@ -207,9 +216,12 @@ class Screen:
         """
         return True
 
-###################################################
+
+##############################################################
+
 
 class ScreenManager:
+
     def __init__(self):
         self.screens = {}
         self.active_screen_name = ""
@@ -217,16 +229,19 @@ class ScreenManager:
 
     def register_screen(self, screen):
         if screen.name in self.screens:
-            logging.warning("(Screen Manager) Screen " + screen.name + " is already registered.")
+            logging.warning(
+                "(Screen Manager) Screen " + screen.name + " is already registered.")
             return
 
         self.screens[screen.name] = screen
 
-        logging.info("(Screen Manager) Screen '" + screen.name + "' registered.")
+        logging.info(
+            "(Screen Manager) Screen '" + screen.name + "' registered.")
 
     def deregister_screen(self, name):
         if name not in self.screens:
-            logging.warning("(Screen Manager) Screen " + name + " is not registered.")
+            logging.warning(
+                "(Screen Manager) Screen " + name + " is not registered.")
             return
 
         if self.screens[name].initialized:
@@ -242,7 +257,8 @@ class ScreenManager:
 
     def switch_to(self, name):
         if name not in self.screens:
-            logging.warning("(Screen Manager) Screen " + name + " is not registered.")
+            logging.warning(
+                "(Screen Manager) Screen " + name + " is not registered.")
 
         logging.info("(Screen Manager) Switching to '" + name + "' screen.")
 
@@ -263,7 +279,8 @@ class ScreenManager:
 
     def get_screen(self, name):
         if name not in self.screens:
-            logging.warning("(Screen Manager) Screen " + name + " is not registered.")
+            logging.warning(
+                "(Screen Manager) Screen " + name + " is not registered.")
 
         return self.screens[name]
 
@@ -271,5 +288,4 @@ class ScreenManager:
         if self.active_screen:
             self.active_screen.update(delta)
 
-###################################################
-
+##############################################################
