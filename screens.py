@@ -40,10 +40,16 @@ class GameMain(engine.Screen):
         self.surface = pygame.Surface((800, 600)).convert()
         self.rect = pygame.Rect(0, 0, 800, 600)
 
+        # Background Image
+        self.background_image = None
+        self.background_rect = None
+
         self.bins = None
 
     def initialize(self):
         engine.Screen.initialize(self)
+
+        self.background_image, self.background_rect = self.kernel.image_manager.load("background_tmp.bmp")
 
         self.bins = game.Bins(self.kernel, self)
 
@@ -106,6 +112,8 @@ class GameMain(engine.Screen):
         self.kernel.display_surface.blit(self.surface, self.rect)
 
         self.surface.fill(engine.Colors.BLUE)
+        
+        self.surface.blit(self.background_image, self.background_rect)
 
 
 ###################################################

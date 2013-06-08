@@ -16,7 +16,7 @@ class Garmet:
         self.position = [0, 0]
 
         self.falling = True
-        self.gravity = 1
+        self.gravity = 0.05
         self.velocity = 0
 
 
