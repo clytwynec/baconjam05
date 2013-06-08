@@ -28,19 +28,21 @@ class GameMain(engine.Screen):
 
         self.current_garmet = None
 
+        self.garmets = []
+
     def initialize(self):
         engine.Screen.initialize(self)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
-            current_mouse_x = pygame.mouse.get_pos()[0]
+            current_mouse_x = event.pos[0]
 
             # Calculate shakes.  This is done by counting how many times
             # the mouse has changed direction within a given timeframe
-            if self.mouse_moving_right and self.last_mouse_x > self.current_mouse_x:
+            if self.mouse_moving_right and self.last_mouse_x > current_mouse_x:
                 self.shakes += 1
                 self.mouse_moving_right = False
-            elif self.mouse_moving_right and self.last_mouse_x < self.current_mouse_x:
+            elif not self.mouse_moving_right and self.last_mouse_x < current_mouse_x:
                 self.shakes += 1
                 self.mouse_moving_right = True
 
@@ -54,6 +56,20 @@ class GameMain(engine.Screen):
 
                 if self.current_garmet:
                     self.current_garmet.shake()
+
+            # Also make sure we drag the current garmet around if its set
+            if self.current_garmet:
+                self.current_garmet.position = (event.pos)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            for garmet in self.garmets:
+                if garmet.rect.collidepoint(event.pos):
+                    self.current_garmet = garmet
+                    break
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if self.current_garmet:
+                self.current_garmet = None
 
 
     def update(self, delta):

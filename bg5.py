@@ -9,10 +9,9 @@ kernel = engine.Kernel()
 
 screen_surf = kernel.initialize_display((800, 600))
 
-kernel.screen_manager.register_screen(engine.Screen(kernel, 'Testing'))
-kernel.screen_manager.register_screen(screens.TestScreen(kernel))
+kernel.screen_manager.register_screen(screens.GameMain(kernel))
 
-kernel.screen_manager.switch_to('Test Screen')
+kernel.screen_manager.switch_to('GameMain')
 
 font = pygame.font.SysFont("Helvetica", 12)
 
