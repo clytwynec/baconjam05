@@ -40,9 +40,12 @@ class GameMain(engine.Screen):
         self.surface = pygame.Surface((800, 600)).convert()
         self.rect = pygame.Rect(0, 0, 800, 600)
 
+        self.bins = None
 
     def initialize(self):
         engine.Screen.initialize(self)
+
+        self.bins = game.Bins(self.kernel, self)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
@@ -90,8 +93,12 @@ class GameMain(engine.Screen):
             self.ticks = 0
             self.shakes = max(self.shakes - 1, 0)
 
+        self.bins.update(delta)
+
         for garmet in self.garmets:
             garmet.update(delta)
+
+        self.bins.draw(self.surface)
 
         for garmet in self.garmets:
             garmet.draw(self.surface)
