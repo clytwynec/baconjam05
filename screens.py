@@ -112,7 +112,8 @@ class GameMain(engine.Screen):
         self.kernel.display_surface.blit(self.surface, self.rect)
 
         self.surface.fill(engine.Colors.BLUE)
-        self.surface.fill(self.background_image, self.background_rect)
+        
+        self.surface.blit(self.background_image, self.background_rect)
 
 
 ###################################################
