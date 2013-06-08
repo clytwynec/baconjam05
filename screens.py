@@ -4,6 +4,7 @@ import random
 import pygame
 
 import engine
+import game
 
 ###################################################
 class TestScreen(engine.Screen):
@@ -21,14 +22,24 @@ class GameMain(engine.Screen):
     def __init__(self, kernel):
         engine.Screen.__init__(self, kernel, 'GameMain')
 
+        # For shaking gesture
         self.last_mouse_x = pygame.mouse.get_pos()[0]
         self.shakes = 0
         self.ticks = 0
         self.mouse_moving_right = False
 
+        # For clicking and dragging
         self.current_garmet = None
 
+        # A list of the garmets in the game area
+        self.garmet_randomizer = game.GarmetRandomizer(kernel, self)
         self.garmets = []
+        self.garmets.append(self.garmet_randomizer.next())
+
+        # Drawing Stuff
+        self.surface = pygame.Surface((800, 600)).convert()
+        self.rect = pygame.Rect(0, 0, 800, 600)
+
 
     def initialize(self):
         engine.Screen.initialize(self)
@@ -78,6 +89,16 @@ class GameMain(engine.Screen):
         if (self.ticks >= 200):
             self.ticks = 0
             self.shakes = max(self.shakes - 1, 0)
+
+        for garmet in self.garmets:
+            garmet.update(delta)
+
+        for garmet in self.garmets:
+            garmet.draw(self.surface)
+
+        self.kernel.display_surface.blit(self.surface, self.rect)
+
+        self.surface.fill(engine.Colors.BLUE)
 
 
 ###################################################
