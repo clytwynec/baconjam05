@@ -278,7 +278,7 @@ class ScreenManager:
         self.active_screen = self.screens[name]
 
         if self.active_screen.initialized:
-            self.active_screen.unpause()
+            self.active_screen.resume()
         else:
             self.active_screen.initialize()
 
