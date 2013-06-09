@@ -273,7 +273,7 @@ class Coin:
         self.image, self.rect = kernel.image_manager.load(random.choice(coin_images), True)
 
         self.gravity = 0.5
-        self.velocity = [ random.randint(-5, 5), -10 ]
+        self.velocity = [ random.randint(-5, 5), -10 - random.randint(0, 5) ]
         self.position = [ start_position[0], start_position[1] ]
 
     def update(self, delta):

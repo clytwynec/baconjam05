@@ -26,10 +26,10 @@ while 1:
     kernel.screen_manager.update(delta)
 
     # Render the FPS display
-    fps_surf = font.render("FPS: " + str(int(kernel.ticker.get_fps())), True, (255, 255, 255))
-    fps_rect = fps_surf.get_rect()
-    fps_rect.topright = screen_surf.get_rect().topright
-    screen_surf.blit(fps_surf, fps_rect)
+    # fps_surf = font.render("FPS: " + str(int(kernel.ticker.get_fps())), True, (255, 255, 255))
+    # fps_rect = fps_surf.get_rect()
+    # fps_rect.topright = screen_surf.get_rect().topright
+    # screen_surf.blit(fps_surf, fps_rect)
 
     kernel.flip_display()
 

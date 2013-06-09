@@ -59,13 +59,16 @@ class GameMain(engine.Screen):
         self.longest_sock_streak = 0
         self.on_streak = False
 
-        self.font = pygame.font.SysFont("Helvetica", 16, True)
+        self.font = pygame.font.SysFont("Helvetica", 20, True)
 
         self.sock_bin_right_image, self.sock_bin_right_rect = kernel.image_manager.load('basket_left.bmp', True)
-        self.sock_bin_right_rect.bottomleft = (690, 188)
+        self.sock_bin_right_rect.bottomleft = (700, 288)
 
         self.sock_bin_left_image, self.sock_bin_left_rect = kernel.image_manager.load('basket_right.bmp', True)
-        self.sock_bin_left_rect.bottomleft = (12, 188)
+        self.sock_bin_left_rect.bottomleft = (2, 288)
+
+        self.life_icon, self.life_icon_rect = kernel.image_manager.load('icon_life.bmp', True)
+        self.coin_icon, self.coin_icon_rect = kernel.image_manager.load('coin02.bmp', True)
 
     def initialize(self):
         engine.Screen.initialize(self)
@@ -185,11 +188,19 @@ class GameMain(engine.Screen):
         for coin in self.coins:
             coin.draw(self.surface)
 
-        text = self.font.render("Lives: " + str(self.lives), True, engine.Colors.BLACK)
-        self.surface.blit(text, (10, 10, text.get_rect().width, text.get_rect().height))
+        for life in range(self.lives):
+            self.surface.blit(self.life_icon, pygame.Rect(10 + (life * 23), 10, self.life_icon_rect.width, self.life_icon_rect.height))
 
-        text = self.font.render("Coins: " + str(self.coin_total), True, engine.Colors.BLACK)
-        self.surface.blit(text, (790 - text.get_rect().width, 10, text.get_rect().width, text.get_rect().height))
+
+        text = self.font.render(str(self.coin_total), True, engine.Colors.BLACK)
+        self.surface.blit(self.coin_icon, pygame.Rect(
+            750 - self.coin_icon_rect.width,
+            15,
+            self.coin_icon_rect.width,
+            self.coin_icon_rect.height
+        ))
+
+        self.surface.blit(text, (790 - text.get_rect().width, 15, text.get_rect().width, text.get_rect().height))
 
         self.kernel.display_surface.blit(self.surface, self.rect)
 
@@ -338,8 +349,8 @@ class MainMenu(engine.Screen):
     def update(self, delta):
         self.kernel.display_surface.blit(self.background_image, self.background_rect)
 
-        for state, rect in self.menu_rects.iteritems():
-            pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
+        # for state, rect in self.menu_rects.iteritems():
+        #     pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
 
 class Instructions(engine.Screen):
     def __init__(self, kernel):
@@ -366,5 +377,5 @@ class Instructions(engine.Screen):
     def update(self, delta):
         self.kernel.display_surface.blit(self.background_image, self.background_rect)
 
-        for state, rect in self.menu_rects.iteritems():
-            pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
+        # for state, rect in self.menu_rects.iteritems():
+        #     pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
