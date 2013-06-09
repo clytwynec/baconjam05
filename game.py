@@ -16,11 +16,17 @@ class Garmet:
         self.position = [0, 0]
 
         self.falling = True
-        self.gravity = 1
+        self.gravity = 0.05
         self.velocity = 0
 
-
         pass
+
+    def pick_up(self):
+        self.falling = False
+        self.velocity = 0
+
+    def put_down(self):
+        self.falling = True
 
     def shake(self):
         # Drop some coins if we so care to here
