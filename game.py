@@ -1,7 +1,17 @@
 import pygame, math, random, engine
 class GarmentColor:
-    lights = [(255, 255, 255),( 200, 200, 200)]
-    darks = [(0, 0, 0), (50, 50, 50), (255, 0, 0), (0, 255, 0), (0, 0, 255)]
+    lights = [
+        (255, 255, 255),    # White
+        (225, 225, 225)     # Light Gray
+    ]
+
+    darks = [
+        (0, 0, 0),          # Black
+        (50, 50, 50),       # Dark Gray 
+        (255, 0, 0),        # Red
+        (0, 255, 0),        # Green
+        (0, 0, 255)         # Blue
+    ]
 
 class Garment:
     def __init__(self, kernel, screen, garment_type, biohazard, coins, color_cat):
@@ -38,7 +48,7 @@ class Garment:
         self.gravity = 0.05
         self.velocity = 0
 
-        pixel_array = pygame.PixelArray(self.image)
+        pixel_array = pygame.PixelArray(self.image.copy())
         pixel_array.replace((255, 255, 255), self.color) 
         self.surface = pixel_array.make_surface()
         self.surface.set_colorkey(engine.Colors.TRANSPARENT)
