@@ -23,7 +23,7 @@ class Garment:
         self.coinage = coins
 
         # Properties Go Here
-        self.position = [0, 0]
+        self.position = [400, 0]
 
         self.falling = True
         self.gravity = 0.05
@@ -39,7 +39,9 @@ class Garment:
 
     def shake(self):
         # Drop some coins if we so care to here
-        print "Shake shake shake"
+        if self.coinage:
+            self.screen.coins.extend([ Coin(self.kernel, self.screen, self.position) for x in range(self.coinage) ])
+            self.coinage = 0
 
     def on_bin_collision(self, bin_type):
         pass
@@ -185,3 +187,25 @@ class Bins:
 
 class Shelves:
     pass
+
+class Coin:
+    def __init__(self, kernel, screen, start_position):
+        self.kernel = kernel
+        self.screen = screen
+
+        self.image, self.rect = kernel.image_manager.load("coin.bmp", True)
+
+        self.gravity = 0.5
+        self.velocity = [ random.randint(-5, 5), -10 ]
+        self.position = [ start_position[0], start_position[1] ]
+
+    def update(self, delta):
+        self.velocity[1] += self.gravity
+
+        self.position[0] += self.velocity[0]
+        self.position[1] += self.velocity[1]
+
+    def draw(self, surface):
+        self.rect.center = self.position
+
+        surface.blit(self.image, self.rect)

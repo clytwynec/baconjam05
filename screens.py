@@ -46,6 +46,8 @@ class GameMain(engine.Screen):
 
         self.bins = None
 
+        self.coins = []
+
     def initialize(self):
         engine.Screen.initialize(self)
 
@@ -111,10 +113,17 @@ class GameMain(engine.Screen):
             if col:
                 garment.on_bin_collision(col)
 
+        for coin in self.coins:
+            coin.update(delta)
+
         self.bins.draw(self.surface)
+
 
         for garment in self.garments:
             garment.draw(self.surface)
+
+        for coin in self.coins:
+            coin.draw(self.surface)
 
         self.kernel.display_surface.blit(self.surface, self.rect)
 
