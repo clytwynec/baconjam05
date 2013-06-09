@@ -29,6 +29,8 @@ class Garment:
 
         self.image, self.rect = kernel.image_manager.load(random.choice(self.image_choices[garment_type]), True)
 
+        self.stink_image, self.stink_rect = kernel.image_manager.load("stinks.bmp", True)
+
         # Random Color
         self.color_cat = color_cat
 
@@ -79,7 +81,14 @@ class Garment:
         if self.image and self.rect:
             # Position the rectangle for correct drawing
             self.rect.center = self.position
+            
+            self.stink_rect.center = self.position
+            self.stink_rect.top = self.stink_rect.top - 20
+
             surface.blit(self.surface, self.rect)
+
+            if self.biohazard:
+                surface.blit(self.stink_image, self.stink_rect)
 
 
 class GarmentRandomizer:
