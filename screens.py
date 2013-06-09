@@ -271,7 +271,8 @@ class MainMenu(engine.Screen):
         self.background_image, self.background_rect = kernel.image_manager.load("title_screen.bmp")
 
         self.menu_rects = {
-            'GameMain': pygame.Rect(100, 290, 325, 150),
+            'NewGame': pygame.Rect(100, 290, 325, 150),
+            'GameMain': pygame.Rect(485, 150, 225, 150),
             'Instructions': pygame.Rect(485, 380, 130, 20),
             'MainMenu': pygame.Rect(485, 402, 80, 20),
             'Exit': pygame.Rect(485, 423, 50, 20)
@@ -284,6 +285,9 @@ class MainMenu(engine.Screen):
                     if (item == "Exit"):
                         pygame.quit()
                         sys.exit()
+                    elif item == 'NewGame':
+                        self.screen_manager.get_screen('GameMain').initialized = False
+                        self.screen_manager.switch_to('GameMain')
                     else:
                         self.screen_manager.switch_to(item)
             pass
