@@ -92,7 +92,7 @@ class Garment:
         self.coinage = coins
 
         # Properties Go Here
-        self.position = [400, 0]
+        self.position = [400, 75]
 
         self.falling = True
         self.gravity = 0.05
@@ -174,45 +174,45 @@ class Bins:
             'biohazard'
         ]
 
-        light_image, light_rect = kernel.image_manager.load("lights.bmp", True)
-        dark_image, dark_rect = kernel.image_manager.load("darks.bmp", True)
-        bio_image, bio_rect = kernel.image_manager.load("biohazard.bmp", True)
+        light_icon, light_rect = kernel.image_manager.load("icon_light.bmp", True)
+        dark_icon, dark_rect = kernel.image_manager.load("icon_dark.bmp", True)
+        biohazard_icon, biohazard_rect = kernel.image_manager.load("icon_biohazard.bmp", True)
 
-        self.bin_images = {
-            'lights': light_image,
-            'darks': dark_image,
-            'biohazard': bio_image,
+        self.bin_icons = {
+            'lights': light_icon,
+            'darks': dark_icon,
+            'biohazard': biohazard_icon
         }
 
-        self.bin_rects = {
-            'lights': light_rect,
-            'darks': dark_rect,
-            'biohazard': bio_rect,
-        }
+        self.bin_image, self.bin_image_rect = kernel.image_manager.load("bins.bmp", True)
+        self.bin_image_rect.left = 100
 
-        self.bin_x_positions = [
-            100,
-            300,
-            500
+        self.bin_icon_rects = [
+            pygame.Rect(190, 345, light_rect.width, light_rect.height),
+            pygame.Rect(350, 320, light_rect.width, light_rect.height),
+            pygame.Rect(500, 350, light_rect.width, light_rect.height)
+        ]
+
+        self.bin_rects = [
+            pygame.Rect(100, 475, 184, 100),
+            pygame.Rect(286, 475, 192, 100),
+            pygame.Rect(480, 475, 190, 100)
         ]
 
         # How long we've stayed in position
         self.ticks = 0
         self.randomize_time = 15000
         self.move_counter = 0
-        self.y_position = 450
 
-        self.y_position = 450
+        self.y_position = 500
 
     def spin(self):
         # Randomize the order of the bins
         random.shuffle(self.bins)
 
     def garment_check(self, garment):
-        for (bin, pos) in zip(self.bins, self.bin_x_positions):
-            rect = pygame.Rect(pos, self.y_position, self.bin_rects[bin].width, self.bin_rects[bin].height)
-
-            if rect.colliderect(garment.rect):
+        for (bin, rect) in zip(self.bins, self.bin_rects):
+            if rect.collidepoint((garment.rect.center[0], garment.rect.bottom)):
                 return bin
 
         return None
@@ -246,19 +246,16 @@ class Bins:
             self.move_counter += 1
 
     def draw(self, surface):
-        for (bin, x_position) in zip(self.bins, self.bin_x_positions):
-            image = self.bin_images[bin]
-            rect = self.bin_rects[bin]
+        self.bin_image_rect.top = self.y_position - 100
 
-            surface.blit(
-                image,
-                pygame.Rect(
-                    x_position,
-                    self.y_position,
-                    rect.width,
-                    rect.height
-                )
-            )
+        surface.blit(self.bin_image, self.bin_image_rect)
+
+        for bin, rect, icon_rect in zip(self.bins, self.bin_rects, self.bin_icon_rects):
+            bin_icon = self.bin_icons[bin]
+            surface.blit(bin_icon, icon_rect)
+
+        for rect in self.bin_rects:
+            rect.top = self.y_position
 
 class Shelves:
     pass
