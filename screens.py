@@ -51,6 +51,7 @@ class GameMain(engine.Screen):
         self.bin_score = {'lights': 0, 'darks': 0, 'biohazard': 0}
 
         self.lives = 10
+        self.coin_total = 0
 
         self.coins = []
 
@@ -79,7 +80,7 @@ class GameMain(engine.Screen):
             # If we've changed directions more than 5 times, then
             # trigger the shake event for the current garment and
             # reset the counter
-            if self.shakes >= 3:
+            if self.shakes >= 2:
                 self.shakes = 0
 
                 if self.current_garment:
@@ -108,6 +109,11 @@ class GameMain(engine.Screen):
         if (self.ticks >= 200): 
             self.ticks = 0
             self.shakes = max(self.shakes - 1, 0)
+
+        # Extra Lives
+        if (self.coin_total >= 100):
+            self.lives += 1
+            self.coin_total = self.coin_total % 100
 
         self.next_garment -= self.ticks
 
