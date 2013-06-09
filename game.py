@@ -122,15 +122,20 @@ class Bins:
 
             t = (self.move_counter / float(max_counter)) * math.pi
 
+            # We need to know what the max value we're going to get is in order
+            # for us to scale the movement function between 0 and 1
             midpoint = (((max_counter / 2) - 1) / float(max_counter)) * math.pi
 
+            # Make sure we avoid the asymptote for position updating
             if t != (math.pi / 2):
                 movement = math.tan(t) / math.tan(midpoint)
                 self.y_position += 100 * movement
 
+            # Spin our bins when we're off the bottom of the screen
             if self.move_counter == max_counter / 2:
                 self.spin()
 
+            # Make sure we reset the bin when we're done
             if self.move_counter >= max_counter:
                 self.move_counter = 0
                 self.ticks = 0
