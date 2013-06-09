@@ -1,9 +1,29 @@
 import pygame, math, random, engine
 class GarmentColor:
-    lights = [
-        (255, 255, 255),    # White
-        (225, 225, 225)     # Light Gray
-    ]
+    lights = {
+        'shirt': [
+            'light_shirt01.bmp',
+            'light_shirt03.bmp'
+            ],
+        'pants': [
+            'light_pants01.bmp',
+            'light_pants02.bmp',
+            'light_shorts01.bmp',
+            'light_skirt01.bmp'
+            ]
+        'sock': [ 
+            'light_socks01.bmp',
+            'light_socks03.bmp',
+            'light_socks04.bmp',
+            'light_socks05.bmp'
+            ],
+        'undies': [ 
+            'light_bra01.bmp',
+            'light_bra02.bmp', 
+            'light_briefs01.bmp',
+            'light_briefs02.bmp'
+            ]
+    }
 
     darks = [
         (0, 0, 0),          # Black
