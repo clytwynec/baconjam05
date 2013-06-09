@@ -46,7 +46,10 @@ class GameMain(engine.Screen):
         self.background_image = None
         self.background_rect = None
 
+        # bin stuff
         self.bins = None
+        self.bin_score = {'lights': 0, 'darks': 0, 'biohazard': 0}
+
 
         self.coins = []
 
@@ -101,7 +104,7 @@ class GameMain(engine.Screen):
     def update(self, delta):
         self.ticks += delta
 
-        if (self.ticks >= 200):
+        if (self.ticks >= 200): 
             self.ticks = 0
             self.shakes = max(self.shakes - 1, 0)
 
@@ -117,10 +120,10 @@ class GameMain(engine.Screen):
             garment.update(delta)
 
             # Check garment collisions
-            col = self.bins.garment_check(garment)
+            bin = self.bins.garment_check(garment)
 
-            if col:
-                garment.on_bin_collision(col)
+            if bin:
+                self.on_bin_collision(garment, bin)
 
         for coin in self.coins:
             coin.update(delta)
@@ -139,6 +142,31 @@ class GameMain(engine.Screen):
         self.surface.fill(engine.Colors.BLUE)
         
         self.surface.blit(self.background_image, self.background_rect)
+
+    def on_bin_collision(self, garment, bin):
+        if garment.biohazard == True:
+
+            # if biohazard and in correct bin
+            if bin == 'biohazard':
+                self.bin_score[bin] += 1
+
+            # if biohazard in wrong bin
+            else:
+                self.bin_score[bin] -= self.bin_score[bin]/2
+
+        # if not biohazard and in correct bin
+        elif garment.color_cat == bin:
+            self.bin_score[bin] += 1
+
+        # if not biohazard and in wrong bin
+        else:
+            self.bin_score[bin] -= 1
+
+        if self.current_garment == garment:
+            self.current_garment = None
+            
+        self.garments.remove(garment)
+        print self.bin_score
 
 
 ###################################################

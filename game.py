@@ -66,9 +66,6 @@ class Garment:
             self.screen.coins.extend([ Coin(self.kernel, self.screen, self.position) for x in range(self.coinage) ])
             self.coinage = 0
 
-    def on_bin_collision(self, bin_type):
-        pass
-
     def update(self, delta):
         # Update our position if we're falling
         if self.falling:
