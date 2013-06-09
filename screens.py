@@ -55,6 +55,8 @@ class GameMain(engine.Screen):
 
         self.coins = []
 
+        self.font = pygame.font.SysFont("Helvetica", 16, True)
+
     def initialize(self):
         engine.Screen.initialize(self)
 
@@ -111,9 +113,10 @@ class GameMain(engine.Screen):
             self.shakes = max(self.shakes - 1, 0)
 
         # Extra Lives
-        if (self.coin_total >= 100):
-            self.lives += 1
-            self.coin_total = self.coin_total % 100
+        if (self.coin_total >= 100 and self.lives < 10):
+            num_lives_added = 10 - self.lives
+            self.lives += num_lives_added
+            self.coin_total -= 100 * num_lives_added
 
         self.next_garment -= self.ticks
 
@@ -143,6 +146,13 @@ class GameMain(engine.Screen):
 
         for coin in self.coins:
             coin.draw(self.surface)
+
+        text = self.font.render("Lives: " + str(self.lives), True, engine.Colors.BLACK)
+        self.surface.blit(text, (10, 10, text.get_rect().width, text.get_rect().height))
+
+
+        text = self.font.render("Coins: " + str(self.coin_total), True, engine.Colors.BLACK)
+        self.surface.blit(text, (790 - text.get_rect().width, 10, text.get_rect().width, text.get_rect().height))
 
         self.kernel.display_surface.blit(self.surface, self.rect)
 

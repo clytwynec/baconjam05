@@ -66,6 +66,7 @@ class Garment:
         # Drop some coins if we so care to here
         if self.coinage:
             self.screen.coins.extend([ Coin(self.kernel, self.screen, self.position) for x in range(self.coinage) ])
+            self.screen.coin_total += self.coinage
             self.coinage = 0
 
     def update(self, delta):
