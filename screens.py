@@ -70,6 +70,23 @@ class GameMain(engine.Screen):
     def initialize(self):
         engine.Screen.initialize(self)
 
+        # Reset variables when we start a new game
+        self.last_mouse_x = pygame.mouse.get_pos()[0]
+        self.shakes = 0
+        self.ticks = 0
+        self.mouse_moving_right = False
+        self.current_garment = None
+        self.next_garment = 0
+        self.garments = []
+        self.bins = None
+        self.bin_score = {'lights': 0, 'darks': 0, 'biohazard': 0}
+        self.lives = 10
+        self.coin_total = 0
+        self.coins = []
+        self.sock_bin_streak = 0
+        self.longest_sock_streak = 0
+        self.on_streak = False
+
         self.background_image, self.background_rect = self.kernel.image_manager.load("background.bmp")
 
         self.bins = game.Bins(self.kernel, self)
@@ -114,6 +131,9 @@ class GameMain(engine.Screen):
                 self.current_garment.put_down()
                 self.current_garment = None
 
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.kernel.screen_manager.switch_to('MainMenu')
 
     def update(self, delta):
         self.ticks += delta
