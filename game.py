@@ -153,8 +153,10 @@ class GarmentRandomizer:
         garment_color = random.choice(['lights', 'darks'])
 
         # Choose if Biohazard
-        if garment_choice == 'undies' or garment_choice == 'sock':
-            biohazard_choice = (random.randint(0, 99) < 60)
+        if garment_choice == 'undies':
+            biohazard_choice = (random.randint(0, 99) < 70)
+        elif garment_choice == 'sock':
+            biohazard_choice = (random.randint(0, 99) < 25)
         else:
             biohazard_choice = False
 
@@ -257,8 +259,6 @@ class Bins:
         for rect in self.bin_rects:
             rect.top = self.y_position
 
-class Shelves:
-    pass
 
 class Coin:
     def __init__(self, kernel, screen, start_position):
