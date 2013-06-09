@@ -208,7 +208,22 @@ class Bins:
             )
 
 class Shelves:
-    pass
+    def __init__(self, kernel, screen, position):
+        self.kernel = kernel
+        self.screen = screen
+
+        self.image, self.rect = kernel.image_manager.load("sock_shelve.bmp", True)
+
+        self.socks = []
+
+        if position == 'left':
+            self.rect.topleft = (0, 0)
+        elif position == 'right':
+            self.rect.topright = (800, 0)
+
+    def has_pair_in_bin(self, sock):
+        # Check to see if we have a matching sock
+        pass
 
 class Coin:
     def __init__(self, kernel, screen, start_position):
