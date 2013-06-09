@@ -99,7 +99,7 @@ class Garment:
         self.velocity = 0
 
         self.image, self.rect = kernel.image_manager.load(self.image_name, True)
-
+        self.rect.center = self.position
 
     def pick_up(self):
         self.falling = False
@@ -142,7 +142,7 @@ class GarmentRandomizer:
     def __init__(self, kernel, screen):
         self.kernel = kernel
         self.screen = screen
-        self.weights = {'pants': 20, 'shirt': 40, 'sock': 10, 'undies': 30  }
+        self.weights = {'pants': 20, 'shirt': 30, 'sock': 25, 'undies': 25 }
         self.choice_list = []
 
         for item, weight in self.weights.iteritems():
