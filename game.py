@@ -10,7 +10,14 @@ class Garment:
 
         # Initialize our various properties
         # Image Stuff
-        self.image, self.rect = kernel.image_manager.load("monster.bmp", True)
+        self.image_choices = {
+            'shirt': [ "shirt1.bmp" ],
+            'pants': [ "pants1.bmp" ],
+            'sock': [ "sock1.bmp" ],
+            'undies': [ "undies1.bmp" ] 
+        }
+
+        self.image, self.rect = kernel.image_manager.load(random.choice(self.image_choices[garment_type]), True)
 
         # Random Color
         self.color_cat = color_cat
@@ -89,8 +96,6 @@ class GarmentRandomizer:
             coinage = random.randint(0, 5)
         else: 
             coinage = 0 
-
-        print garment_choice, biohazard_choice, coinage
 
         return Garment(self.kernel, self.screen, garment_choice, biohazard_choice, coinage, garment_color)
 
