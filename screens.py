@@ -169,7 +169,6 @@ class GameMain(engine.Screen):
         text = self.font.render("Lives: " + str(self.lives), True, engine.Colors.BLACK)
         self.surface.blit(text, (10, 10, text.get_rect().width, text.get_rect().height))
 
-
         text = self.font.render("Coins: " + str(self.coin_total), True, engine.Colors.BLACK)
         self.surface.blit(text, (790 - text.get_rect().width, 10, text.get_rect().width, text.get_rect().height))
 
@@ -223,7 +222,7 @@ class GameMain(engine.Screen):
 
 
 class MenuBase(engine.Screen):
-    def __init__(self, name, kernel, gsm):
+    def __init__(self, name, kernel):
         engine.Screen.__init__(self, name, kernel)
 
         self.heading = None
@@ -264,3 +263,66 @@ class MenuBase(engine.Screen):
             self.kernel.display_surface.blit(self.menu_items[item], self.menu_rects[item])
 
         return engine.screen.update(self, delta)
+
+class MainMenu(engine.Screen):
+    def __init__(self, kernel):
+        engine.Screen.__init__(self, kernel, 'MainMenu')
+
+        self.background_image, self.background_rect = kernel.image_manager.load("title_screen.bmp")
+
+        self.menu_rects = {
+            'NewGame': pygame.Rect(100, 290, 325, 150),
+            'GameMain': pygame.Rect(485, 150, 225, 150),
+            'Instructions': pygame.Rect(485, 380, 130, 20),
+            'MainMenu': pygame.Rect(485, 402, 80, 20),
+            'Exit': pygame.Rect(485, 423, 50, 20)
+        }
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for item in self.menu_rects:
+                if (self.menu_rects[item].collidepoint(event.pos)):
+                    if (item == "Exit"):
+                        pygame.quit()
+                        sys.exit()
+                    elif item == 'NewGame':
+                        self.screen_manager.get_screen('GameMain').initialized = False
+                        self.screen_manager.switch_to('GameMain')
+                    else:
+                        self.screen_manager.switch_to(item)
+            pass
+
+
+    def update(self, delta):
+        self.kernel.display_surface.blit(self.background_image, self.background_rect)
+
+        for state, rect in self.menu_rects.iteritems():
+            pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
+
+class Instructions(engine.Screen):
+    def __init__(self, kernel):
+        engine.Screen.__init__(self, kernel, 'Instructions')
+
+        self.background_image, self.background_rect = kernel.image_manager.load("Instructions.bmp")
+
+        self.menu_rects = {
+            'MainMenu': pygame.Rect(15, 15, 90, 40),
+        }
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for item in self.menu_rects:
+                if (self.menu_rects[item].collidepoint(event.pos)):
+                    if (item == "Exit"):
+                        pygame.quit()
+                        sys.exit()
+                    else:
+                        self.screen_manager.switch_to(item)
+            pass
+
+
+    def update(self, delta):
+        self.kernel.display_surface.blit(self.background_image, self.background_rect)
+
+        for state, rect in self.menu_rects.iteritems():
+            pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
