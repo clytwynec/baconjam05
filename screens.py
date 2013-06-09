@@ -56,7 +56,8 @@ class GameMain(engine.Screen):
         self.coins = []
 
         self.sock_bin_streak = 0
-        self.sock_bin_points = 0
+        self.longest_sock_streak = 0
+        self.on_streak = False
 
         self.font = pygame.font.SysFont("Helvetica", 16, True)
 
@@ -65,8 +66,6 @@ class GameMain(engine.Screen):
 
         self.sock_bin_left_image, self.sock_bin_left_rect = kernel.image_manager.load('basket_right.bmp', True)
         self.sock_bin_left_rect.bottomleft = (12, 188)
-
-        print self.sock_bin_left_rect
 
     def initialize(self):
         engine.Screen.initialize(self)
@@ -182,40 +181,63 @@ class GameMain(engine.Screen):
         if garment.type == 'sock':            
             if garment.biohazard == True:
                 self.sock_bin_streak = 0
+                self.on_streak = False
             else:
                 self.sock_bin_streak += 1
+            
             self.garments.remove(garment)
+
+            if self.sock_bin_streak > self.longest_sock_streak:
+                self.longest_sock_streak = self.sock_bin_streak
+            if self.sock_bin_streak >= 3:
+                self.on_streak = True
+
+        print self.sock_bin_streak, self.on_streak, self.longest_sock_streak
 
     def on_bin_collision(self, garment, bin):
         if garment.type == 'sock' and garment.biohazard == False:
             self.sock_bin_streak = 0
+            self.on_streak = False
+
+        if self.on_streak:
+            garment_score = 2
+        else:
+            garment_score = 1
 
         if garment.biohazard == True:
 
             # if biohazard and in correct bin
             if bin == 'biohazard':
-                self.bin_score[bin] += 1
+                self.bin_score[bin] += garment_score
 
             # if biohazard in wrong bin
             else:
                 self.bin_score[bin] -= self.bin_score[bin]/2
                 self.lives -= 1 
 
+                if self.on_streak:
+                    self.sock_bin_streak = 0
+                    self.on_streak = False
+
+
         # if not biohazard and in correct bin
         elif garment.color_cat == bin:
-            self.bin_score[bin] += 1
+            self.bin_score[bin] += garment_score
 
         # if not biohazard and in wrong bin
         else:
-            self.bin_score[bin] -= 1
+            self.bin_score[bin] -= garment_score
             self.lives -= 1
+
+            if self.on_streak:
+                self.sock_bin_streak = 0
+                self.on_streak = False
+
 
         if self.current_garment == garment:
             self.current_garment = None
 
         self.garments.remove(garment)
-        print self.bin_score
-
 
 ###################################################
 
