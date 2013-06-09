@@ -268,7 +268,12 @@ class Coin:
         self.kernel = kernel
         self.screen = screen
 
-        self.image, self.rect = kernel.image_manager.load("coin.bmp", True)
+        coin_images = [
+            "coin01.bmp",
+            "coin02.bmp"
+        ]
+
+        self.image, self.rect = kernel.image_manager.load(random.choice(coin_images), True)
 
         self.gravity = 0.5
         self.velocity = [ random.randint(-5, 5), -10 ]
