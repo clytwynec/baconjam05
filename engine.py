@@ -96,7 +96,7 @@ class ImageManager:
 
     def load(self, filename, transparent=True):
         if (filename in self.loaded_images):
-            return self.loaded_image[filename], self.loaded_images[filename].get_rect()
+            return self.loaded_images[filename], self.loaded_images[filename].get_rect()
         else:
             image = pygame.image.load(os.path.join(
                 Config.asset_path, "images", filename))
