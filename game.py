@@ -66,9 +66,7 @@ class Garment:
             self.position[1] += self.velocity
 
         if self.position[1] > 600:
-            self.position[0] = 400
-            self.position[1] = 0
-            self.velocity = 0
+            self.screen.garments.remove(self)
 
     def draw(self, surface):
         if self.image and self.rect:

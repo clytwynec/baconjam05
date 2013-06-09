@@ -31,10 +31,12 @@ class GameMain(engine.Screen):
         # For clicking and dragging
         self.current_garment = None
 
+        # For the waterfall
+        self.next_garment = 0
+
         # A list of the garments in the game area
         self.garment_randomizer = game.GarmentRandomizer(kernel, self)
         self.garments = []
-        self.garments.append(self.garment_randomizer.next())
 
         # Drawing Stuff
         self.surface = pygame.Surface((800, 600)).convert()
@@ -103,6 +105,12 @@ class GameMain(engine.Screen):
             self.ticks = 0
             self.shakes = max(self.shakes - 1, 0)
 
+        self.next_garment -= self.ticks
+
+        if (self.next_garment <= 0):
+            self.garments.append(self.garment_randomizer.next())
+            self.next_garment = 5000
+
         self.bins.update(delta)
 
         for garment in self.garments:
@@ -110,6 +118,7 @@ class GameMain(engine.Screen):
 
             # Check garment collisions
             col = self.bins.garment_check(garment)
+
             if col:
                 garment.on_bin_collision(col)
 
