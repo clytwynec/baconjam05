@@ -1,17 +1,46 @@
 import pygame, math, random, engine
+
 class GarmentColor:
     lights = [
         (255, 255, 255),    # White
         (225, 225, 225)     # Light Gray
     ]
 
-    darks = [
-        (0, 0, 0),          # Black
-        (50, 50, 50),       # Dark Gray 
-        (255, 0, 0),        # Red
-        (0, 255, 0),        # Green
-        (0, 0, 255)         # Blue
-    ]
+    darks = {
+        'shirt': [
+            "dark_shirt01.bmp",
+            "dark_shirt02.bmp",
+            "dark_shirt03.bmp",
+            "dark_shirt04.bmp",
+            "dark_shirt05.bmp",
+            "dark_shirt06.bmp",
+            "dark_shirt07.bmp",
+            "dark_shirt08.bmp",
+            "dark_shirt09.bmp",
+        ],
+        'pants': [
+            "dark_pants01.bmp",
+            "dark_pants02.bmp",
+            "dark_shorts01.bmp",
+            "dark_shorts02.bmp",
+            "dark_skirt01.bmp",
+            "dark_skirt02.bmp",
+        ],
+        'sock': [
+            "dark_socks01.bmp",
+            "dark_socks02.bmp",
+            "dark_socks03.bmp",
+            "dark_socks04.bmp",
+            "dark_socks05.bmp",
+        ],
+        'undies': [
+            "dark_bra01.bmp",
+            "dark_briefs01.bmp",
+            "dark_thong01.bmp",
+            "dark_thong02.bmp",
+            "dark_thong03.bmp",
+        ],
+    }
 
 class Garment:
     def __init__(self, kernel, screen, garment_type, biohazard, coins, color_cat):
