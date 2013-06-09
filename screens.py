@@ -202,6 +202,15 @@ class GameMain(engine.Screen):
 
         self.surface.blit(text, (790 - text.get_rect().width, 15, text.get_rect().width, text.get_rect().height))
 
+        multiplier = '1x'
+        if self.on_streak:
+            multiplier = '2x'
+
+        multiplier_text = self.font.render(str(multiplier), True, engine.Colors.BLACK)
+        self.surface.blit(multiplier_text, (40, 185, multiplier_text.get_rect().width, multiplier_text.get_rect().height))
+        self.surface.blit(multiplier_text, (740, 185, multiplier_text.get_rect().width, multiplier_text.get_rect().height))
+
+
         self.kernel.display_surface.blit(self.surface, self.rect)
 
         self.surface.fill(engine.Colors.BLUE)
@@ -220,7 +229,7 @@ class GameMain(engine.Screen):
 
             if self.sock_bin_streak > self.longest_sock_streak:
                 self.longest_sock_streak = self.sock_bin_streak
-            if self.sock_bin_streak >= 3:
+            if self.sock_bin_streak >= 5:
                 self.on_streak = True
 
         print self.sock_bin_streak, self.on_streak, self.longest_sock_streak
