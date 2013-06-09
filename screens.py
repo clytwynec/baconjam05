@@ -164,7 +164,7 @@ class GameMain(engine.Screen):
 
         if self.current_garment == garment:
             self.current_garment = None
-            
+
         self.garments.remove(garment)
         print self.bin_score
 
