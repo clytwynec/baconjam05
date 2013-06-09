@@ -1,7 +1,7 @@
 import pygame, math, random
 
-class Garmet:
-    def __init__(self, kernel, screen):
+class Garment:
+    def __init__(self, kernel, screen, garment_type, biohazard, coins):
         self.kernel = kernel
         self.screen = screen
 
@@ -11,6 +11,9 @@ class Garmet:
 
         # Random Color
         self.color = pygame.Color(0, 0, 0)
+        self.type = garment_type
+        self.biohazard = biohazard
+        self.coinage = coins
 
         # Properties Go Here
         self.position = [0, 0]
@@ -19,7 +22,6 @@ class Garmet:
         self.gravity = 0.05
         self.velocity = 0
 
-        pass
 
     def pick_up(self):
         self.falling = False
@@ -31,7 +33,6 @@ class Garmet:
     def shake(self):
         # Drop some coins if we so care to here
         print "Shake shake shake"
-        pass
 
     def on_bin_collision(self, bin_type):
         pass
@@ -53,15 +54,35 @@ class Garmet:
             self.rect.center = self.position
             surface.blit(self.image, self.rect)
 
-        pass
 
-class GarmetRandomizer:
+class GarmentRandomizer:
     def __init__(self, kernel, screen):
         self.kernel = kernel
         self.screen = screen
+        self.weights = {'pants': 20, 'shirt': 40, 'sock': 10, 'undies': 30  }
+        self.choice_list = []
+
+        for item, weight in self.weights.iteritems():
+            self.choice_list.extend([item] * weight)
 
     def next(self):
-        return Garmet(self.kernel, self.screen)
+        garment_choice = random.choice(self.choice_list)
+        
+        # Choose if Biohazard
+        if garment_choice == 'undies' or garment_choice == 'sock':
+            biohazard_choice = (random.randint(0, 99) < 60)
+        else:
+            biohazard_choice = False
+
+        # Choose how many coins in pockets
+        if garment_choice == 'pants':
+            coinage = random.randint(0, 5)
+        else: 
+            coinage = 0 
+
+        print garment_choice, biohazard_choice, coinage
+
+        return Garment(self.kernel, self.screen, garment_choice, biohazard_choice, coinage)
 
 class Bins:
     def __init__(self, kernel, screen):
@@ -105,11 +126,11 @@ class Bins:
         # Randomize the order of the bins
         random.shuffle(self.bins)
 
-    def garmet_check(self, garmet):
+    def garment_check(self, garment):
         for (bin, pos) in zip(self.bins, self.bin_x_positions):
             rect = pygame.Rect(pos, self.y_position, self.bin_rects[bin].width, self.bin_rects[bin].height)
 
-            if rect.colliderect(garmet.rect):
+            if rect.colliderect(garment.rect):
                 return bin
 
         return None
@@ -151,8 +172,6 @@ class Bins:
                     rect.height
                 )
             )
-
-    pass
 
 class Shelves:
     pass
