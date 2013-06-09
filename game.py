@@ -95,7 +95,7 @@ class GarmentRandomizer:
 
         # Choose how many coins in pockets
         if garment_choice == 'pants':
-            coinage = random.randint(0, 5)
+            coinage = random.randint(1, 5)
         else: 
             coinage = 0 
 
@@ -214,6 +214,9 @@ class Coin:
 
         self.position[0] += self.velocity[0]
         self.position[1] += self.velocity[1]
+
+        if self.position[1] >= 650:
+            self.screen.coins.remove(self)
 
     def draw(self, surface):
         self.rect.center = self.position
