@@ -85,10 +85,12 @@ class GameMain(engine.Screen):
             for garmet in self.garmets:
                 if garmet.rect.collidepoint(event.pos):
                     self.current_garmet = garmet
+                    self.current_garmet.pick_up()
                     break
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if self.current_garmet:
+                self.current_garmet.put_down()
                 self.current_garmet = None
 
 
