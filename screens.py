@@ -60,7 +60,7 @@ class GameMain(engine.Screen):
     def initialize(self):
         engine.Screen.initialize(self)
 
-        self.background_image, self.background_rect = self.kernel.image_manager.load("background_tmp.bmp")
+        self.background_image, self.background_rect = self.kernel.image_manager.load("background.bmp")
 
         self.bins = game.Bins(self.kernel, self)
 
