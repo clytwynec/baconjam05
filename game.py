@@ -116,9 +116,9 @@ class GarmentRandomizer:
 class Bins:
     def __init__(self, kernel, screen):
         self.bins = [
-            'Lights',
-            'Darks',
-            'Biohazard'
+            'lights',
+            'darks',
+            'biohazard'
         ]
 
         light_image, light_rect = kernel.image_manager.load("lights.bmp", True)
@@ -126,15 +126,15 @@ class Bins:
         bio_image, bio_rect = kernel.image_manager.load("biohazard.bmp", True)
 
         self.bin_images = {
-            'Lights': light_image,
-            'Darks': dark_image,
-            'Biohazard': bio_image,
+            'lights': light_image,
+            'darks': dark_image,
+            'biohazard': bio_image,
         }
 
         self.bin_rects = {
-            'Lights': light_rect,
-            'Darks': dark_rect,
-            'Biohazard': bio_rect,
+            'lights': light_rect,
+            'darks': dark_rect,
+            'biohazard': bio_rect,
         }
 
         self.bin_x_positions = [
