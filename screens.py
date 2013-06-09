@@ -29,12 +29,12 @@ class GameMain(engine.Screen):
         self.mouse_moving_right = False
 
         # For clicking and dragging
-        self.current_garmet = None
+        self.current_garment = None
 
-        # A list of the garmets in the game area
-        self.garmet_randomizer = game.GarmetRandomizer(kernel, self)
-        self.garmets = []
-        self.garmets.append(self.garmet_randomizer.next())
+        # A list of the garments in the game area
+        self.garment_randomizer = game.GarmentRandomizer(kernel, self)
+        self.garments = []
+        self.garments.append(self.garment_randomizer.next())
 
         # Drawing Stuff
         self.surface = pygame.Surface((800, 600)).convert()
@@ -69,29 +69,29 @@ class GameMain(engine.Screen):
             self.last_mouse_x = current_mouse_x
 
             # If we've changed directions more than 5 times, then
-            # trigger the shake event for the current garmet and
+            # trigger the shake event for the current garment and
             # reset the counter
             if self.shakes >= 3:
                 self.shakes = 0
 
-                if self.current_garmet:
-                    self.current_garmet.shake()
+                if self.current_garment:
+                    self.current_garment.shake()
 
-            # Also make sure we drag the current garmet around if its set
-            if self.current_garmet:
-                self.current_garmet.position = [event.pos[0], event.pos[1]]
+            # Also make sure we drag the current garment around if its set
+            if self.current_garment:
+                self.current_garment.position = [event.pos[0], event.pos[1]]
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            for garmet in self.garmets:
-                if garmet.rect.collidepoint(event.pos):
-                    self.current_garmet = garmet
-                    self.current_garmet.pick_up()
+            for garment in self.garments:
+                if garment.rect.collidepoint(event.pos):
+                    self.current_garment = garment
+                    self.current_garment.pick_up()
                     break
 
         elif event.type == pygame.MOUSEBUTTONUP:
-            if self.current_garmet:
-                self.current_garmet.put_down()
-                self.current_garmet = None
+            if self.current_garment:
+                self.current_garment.put_down()
+                self.current_garment = None
 
 
     def update(self, delta):
@@ -103,18 +103,18 @@ class GameMain(engine.Screen):
 
         self.bins.update(delta)
 
-        for garmet in self.garmets:
-            garmet.update(delta)
+        for garment in self.garments:
+            garment.update(delta)
 
-            # Check garmet collisions
-            col = self.bins.garmet_check(garmet)
+            # Check garment collisions
+            col = self.bins.garment_check(garment)
             if col:
-                garmet.on_bin_collision(col)
+                garment.on_bin_collision(col)
 
         self.bins.draw(self.surface)
 
-        for garmet in self.garmets:
-            garmet.draw(self.surface)
+        for garment in self.garments:
+            garment.draw(self.surface)
 
         self.kernel.display_surface.blit(self.surface, self.rect)
 
