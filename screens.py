@@ -55,7 +55,18 @@ class GameMain(engine.Screen):
 
         self.coins = []
 
+        self.sock_bin_streak = 0
+        self.sock_bin_points = 0
+
         self.font = pygame.font.SysFont("Helvetica", 16, True)
+
+        self.sock_bin_right_image, self.sock_bin_right_rect = kernel.image_manager.load('basket_left.bmp', True)
+        self.sock_bin_right_rect.bottomleft = (690, 188)
+
+        self.sock_bin_left_image, self.sock_bin_left_rect = kernel.image_manager.load('basket_right.bmp', True)
+        self.sock_bin_left_rect.bottomleft = (12, 188)
+
+        print self.sock_bin_left_rect
 
     def initialize(self):
         engine.Screen.initialize(self)
@@ -139,11 +150,15 @@ class GameMain(engine.Screen):
             if bin:
                 self.on_bin_collision(garment, bin)
 
+            if (self.sock_bin_left_rect.colliderect(garment.rect) or self.sock_bin_right_rect.colliderect(garment.rect)):
+                self.on_sock_bin_collision(garment)
+
         for coin in self.coins:
             coin.update(delta)
 
         self.bins.draw(self.surface)
-
+        self.surface.blit(self.sock_bin_left_image, self.sock_bin_left_rect)
+        self.surface.blit(self.sock_bin_right_image, self.sock_bin_right_rect)
 
         for garment in self.garments:
             garment.draw(self.surface)
@@ -164,7 +179,18 @@ class GameMain(engine.Screen):
         
         self.surface.blit(self.background_image, self.background_rect)
 
+    def on_sock_bin_collision(self, garment):
+        if garment.type == 'sock':            
+            if garment.biohazard == True:
+                self.sock_bin_streak = 0
+            else:
+                self.sock_bin_streak += 1
+            self.garments.remove(garment)
+
     def on_bin_collision(self, garment, bin):
+        if garment.type == 'sock' and garment.biohazard == False:
+            self.sock_bin_streak = 0
+
         if garment.biohazard == True:
 
             # if biohazard and in correct bin
@@ -193,6 +219,8 @@ class GameMain(engine.Screen):
 
 
 ###################################################
+
+
 
 class MenuBase(engine.Screen):
     def __init__(self, name, kernel, gsm):
