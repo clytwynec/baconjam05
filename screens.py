@@ -50,6 +50,7 @@ class GameMain(engine.Screen):
         self.bins = None
         self.bin_score = {'lights': 0, 'darks': 0, 'biohazard': 0}
 
+        self.lives = 10
 
         self.coins = []
 
@@ -153,6 +154,7 @@ class GameMain(engine.Screen):
             # if biohazard in wrong bin
             else:
                 self.bin_score[bin] -= self.bin_score[bin]/2
+                self.lives -= 1 
 
         # if not biohazard and in correct bin
         elif garment.color_cat == bin:
@@ -161,6 +163,7 @@ class GameMain(engine.Screen):
         # if not biohazard and in wrong bin
         else:
             self.bin_score[bin] -= 1
+            self.lives -= 1
 
         if self.current_garment == garment:
             self.current_garment = None
