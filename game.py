@@ -30,6 +30,10 @@ class Garmet:
 
     def shake(self):
         # Drop some coins if we so care to here
+        print "Shake shake shake"
+        pass
+
+    def on_bin_collision(self, bin_type):
         pass
 
     def update(self, delta):
@@ -101,9 +105,14 @@ class Bins:
         # Randomize the order of the bins
         random.shuffle(self.bins)
 
-    def collide_bins(self, garmet):
-        # returns which bin the garmet is in
-        pass
+    def garmet_check(self, garmet):
+        for (bin, pos) in zip(self.bins, self.bin_x_positions):
+            rect = pygame.Rect(pos, self.y_position, self.bin_rects[bin].width, self.bin_rects[bin].height)
+
+            if rect.colliderect(garmet.rect):
+                return bin
+
+        return None
 
     def update(self, delta):
         self.ticks += delta

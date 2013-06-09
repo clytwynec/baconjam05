@@ -71,7 +71,7 @@ class GameMain(engine.Screen):
             # If we've changed directions more than 5 times, then
             # trigger the shake event for the current garmet and
             # reset the counter
-            if self.shakes >= 5:
+            if self.shakes >= 3:
                 self.shakes = 0
 
                 if self.current_garmet:
@@ -105,6 +105,11 @@ class GameMain(engine.Screen):
 
         for garmet in self.garmets:
             garmet.update(delta)
+
+            # Check garmet collisions
+            col = self.bins.garmet_check(garmet)
+            if col:
+                garmet.on_bin_collision(col)
 
         self.bins.draw(self.surface)
 
