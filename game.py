@@ -1,7 +1,10 @@
 import pygame, math, random
+class GarmentColor:
+    lights = [(255, 255, 255),( 200, 200, 200)]
+    darks = [(0, 0, 0), (50, 50, 50), (255, 0, 0), (0, 255, 0), (0, 0, 255)]
 
 class Garment:
-    def __init__(self, kernel, screen, garment_type, biohazard, coins):
+    def __init__(self, kernel, screen, garment_type, biohazard, coins, color_cat):
         self.kernel = kernel
         self.screen = screen
 
@@ -10,7 +13,13 @@ class Garment:
         self.image, self.rect = kernel.image_manager.load("monster.bmp", True)
 
         # Random Color
-        self.color = pygame.Color(0, 0, 0)
+        self.color_cat = color_cat
+
+        if color_cat == 'lights':
+            self.color = random.choice(GarmentColor.lights)
+        else:
+            self.color = random.choice(GarmentColor.darks)
+
         self.type = garment_type
         self.biohazard = biohazard
         self.coinage = coins
@@ -67,7 +76,8 @@ class GarmentRandomizer:
 
     def next(self):
         garment_choice = random.choice(self.choice_list)
-        
+        garment_color = random.choice(['lights', 'darks'])
+
         # Choose if Biohazard
         if garment_choice == 'undies' or garment_choice == 'sock':
             biohazard_choice = (random.randint(0, 99) < 60)
@@ -82,7 +92,7 @@ class GarmentRandomizer:
 
         print garment_choice, biohazard_choice, coinage
 
-        return Garment(self.kernel, self.screen, garment_choice, biohazard_choice, coinage)
+        return Garment(self.kernel, self.screen, garment_choice, biohazard_choice, coinage, garment_color)
 
 class Bins:
     def __init__(self, kernel, screen):
