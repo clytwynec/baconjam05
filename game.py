@@ -1,4 +1,4 @@
-import pygame, math, random
+import pygame, math, random, engine
 class GarmentColor:
     lights = [(255, 255, 255),( 200, 200, 200)]
     darks = [(0, 0, 0), (50, 50, 50), (255, 0, 0), (0, 255, 0), (0, 0, 255)]
@@ -38,6 +38,10 @@ class Garment:
         self.gravity = 0.05
         self.velocity = 0
 
+        pixel_array = pygame.PixelArray(self.image)
+        pixel_array.replace((255, 255, 255), self.color) 
+        self.surface = pixel_array.make_surface()
+        self.surface.set_colorkey(engine.Colors.TRANSPARENT)
 
     def pick_up(self):
         self.falling = False
@@ -70,7 +74,7 @@ class Garment:
         if self.image and self.rect:
             # Position the rectangle for correct drawing
             self.rect.center = self.position
-            surface.blit(self.image, self.rect)
+            surface.blit(self.surface, self.rect)
 
 
 class GarmentRandomizer:
