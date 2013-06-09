@@ -145,7 +145,7 @@ class Bins:
 
         # How long we've stayed in position
         self.ticks = 0
-        self.randomize_time = 1500
+        self.randomize_time = 15000
         self.move_counter = 0
         self.y_position = 450
 

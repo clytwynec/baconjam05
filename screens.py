@@ -109,7 +109,7 @@ class GameMain(engine.Screen):
 
         if (self.next_garment <= 0):
             self.garments.append(self.garment_randomizer.next())
-            self.next_garment = 5000
+            self.next_garment = 10000
 
         self.bins.update(delta)
 
