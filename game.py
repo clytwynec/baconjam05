@@ -11,7 +11,7 @@ class GarmentColor:
             'light_pants02.bmp',
             'light_shorts01.bmp',
             'light_skirt01.bmp'
-            ]
+            ],
         'sock': [ 
             'light_socks01.bmp',
             'light_socks03.bmp',
@@ -76,7 +76,6 @@ class Garment:
             'undies': [ "undies1.bmp" ] 
         }
 
-        self.image, self.rect = kernel.image_manager.load(random.choice(self.image_choices[garment_type]), True)
 
         self.stink_image, self.stink_rect = kernel.image_manager.load("stinks.bmp", True)
 
@@ -84,9 +83,9 @@ class Garment:
         self.color_cat = color_cat
 
         if color_cat == 'lights':
-            self.color = random.choice(GarmentColor.lights)
+            self.image_name = random.choice(GarmentColor.lights[garment_type])
         else:
-            self.color = random.choice(GarmentColor.darks)
+            self.image_name = random.choice(GarmentColor.darks[garment_type])
 
         self.type = garment_type
         self.biohazard = biohazard
@@ -99,10 +98,8 @@ class Garment:
         self.gravity = 0.05
         self.velocity = 0
 
-        pixel_array = pygame.PixelArray(self.image.copy())
-        pixel_array.replace((255, 255, 255), self.color) 
-        self.surface = pixel_array.make_surface()
-        self.surface.set_colorkey(engine.Colors.TRANSPARENT)
+        self.image, self.rect = kernel.image_manager.load(self.image_name, True)
+
 
     def pick_up(self):
         self.falling = False
@@ -135,7 +132,7 @@ class Garment:
             self.stink_rect.center = self.position
             self.stink_rect.top = self.stink_rect.top - 20
 
-            surface.blit(self.surface, self.rect)
+            surface.blit(self.image, self.rect)
 
             if self.biohazard:
                 surface.blit(self.stink_image, self.stink_rect)
