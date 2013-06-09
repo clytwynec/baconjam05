@@ -114,7 +114,7 @@ class GarmentRandomizer:
 
         # Choose how many coins in pockets
         if garment_choice == 'pants':
-            coinage = random.randint(1, 5)
+            coinage = random.randint(5, 20)
         else: 
             coinage = 0 
 

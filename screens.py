@@ -114,7 +114,11 @@ class GameMain(engine.Screen):
 
         # Extra Lives
         if (self.coin_total >= 100 and self.lives < 10):
-            num_lives_added = 10 - self.lives
+            if (self.coin_total/100 <= 10 - self.lives):
+                num_lives_added = self.coin_total/100
+            elif( 10 - self.lives <= self.coin_total/100):
+                num_lives_added =  10 - self.lives
+
             self.lives += num_lives_added
             self.coin_total -= 100 * num_lives_added
 
