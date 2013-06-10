@@ -78,6 +78,10 @@ class GameMain(engine.Screen):
         self.game_over_image, self.game_over_rect = kernel.image_manager.load('game_over.bmp', True)
         self.game_over_rect.center = (400, 300)
 
+        self.music = kernel.sound_manager.load("CantinaRag.wav")
+
+        self.not_muted = 1
+
     def initialize(self):
         engine.Screen.initialize(self)
 
@@ -101,6 +105,10 @@ class GameMain(engine.Screen):
         self.background_image, self.background_rect = self.kernel.image_manager.load("background.bmp")
 
         self.bins = game.Bins(self.kernel, self)
+
+        self.music.set_volume(.3 * self.not_muted)
+        self.music.stop()
+        self.music.play(-1)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
@@ -145,6 +153,11 @@ class GameMain(engine.Screen):
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.kernel.screen_manager.switch_to('MainMenu')
+            elif event.key == pygame.K_m:
+                self.not_muted = (self.not_muted +1) % 2
+                self.music.set_volume(.3 * self.not_muted)
+
+
 
     def update(self, delta):
         if self.lives >= 0:

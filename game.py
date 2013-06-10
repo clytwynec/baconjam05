@@ -76,7 +76,6 @@ class Garment:
             'undies': [ "undies1.bmp" ] 
         }
 
-
         self.stink_image, self.stink_rect = kernel.image_manager.load("stinks.bmp", True)
 
         # Random Color
