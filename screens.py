@@ -160,7 +160,7 @@ class GameMain(engine.Screen):
 
 
     def update(self, delta):
-        if self.lives >= 0:
+        if self.lives > 0:
 
             self.ticks += delta
 
@@ -255,7 +255,7 @@ class GameMain(engine.Screen):
             score_text = self.font.render(str(self.bin_score[bin]), True, engine.Colors.BLACK)
             self.surface.blit(score_text, (rect.center[0], rect.center[1] + 30, score_text.get_rect().width, score_text.get_rect().height))
 
-        if self.lives < 0:
+        if self.lives <= 0:
             self.surface.blit(self.game_over_image, self.game_over_rect)
 
         self.kernel.display_surface.blit(self.surface, self.rect)
