@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import pygame
+import math
 
 import engine
 import game
@@ -50,6 +51,8 @@ class GameMain(engine.Screen):
         self.bins = None
         self.bin_score = {'lights': 0, 'darks': 0, 'biohazard': 0}
 
+        self.total_score = 0
+
         self.lives = 10
         self.coin_total = 0
 
@@ -69,6 +72,11 @@ class GameMain(engine.Screen):
 
         self.life_icon, self.life_icon_rect = kernel.image_manager.load('icon_life.bmp', True)
         self.coin_icon, self.coin_icon_rect = kernel.image_manager.load('coin02.bmp', True)
+        self.score_icon, self.score_icon_rect = kernel.image_manager.load('score.bmp', True)
+        self.score_icon_rect.topleft = (540, 10)
+
+        self.game_over_image, self.game_over_rect = kernel.image_manager.load('game_over.bmp', True)
+        self.game_over_rect.center = (400, 300)
 
     def initialize(self):
         engine.Screen.initialize(self)
@@ -139,44 +147,47 @@ class GameMain(engine.Screen):
                 self.kernel.screen_manager.switch_to('MainMenu')
 
     def update(self, delta):
-        self.ticks += delta
+        if self.lives >= 0:
 
-        if (self.ticks >= 200): 
-            self.ticks = 0
-            self.shakes = max(self.shakes - 1, 0)
+            self.ticks += delta
 
-        # Extra Lives
-        if (self.coin_total >= 100 and self.lives < 10):
-            if (self.coin_total/100 <= 10 - self.lives):
-                num_lives_added = self.coin_total/100
-            elif( 10 - self.lives <= self.coin_total/100):
-                num_lives_added =  10 - self.lives
+            if (self.ticks >= 200): 
+                self.ticks = 0
+                self.shakes = max(self.shakes - 1, 0)
 
-            self.lives += num_lives_added
-            self.coin_total -= 100 * num_lives_added
+            # Extra Lives
+            if (self.coin_total >= 100 and self.lives < 10):
+                if (self.coin_total/100 <= 10 - self.lives):
+                    num_lives_added = self.coin_total/100
+                elif( 10 - self.lives <= self.coin_total/100):
+                    num_lives_added =  10 - self.lives
 
-        self.next_garment -= self.ticks
+                self.lives += num_lives_added
+                self.coin_total -= 100 * num_lives_added
 
-        if (self.next_garment <= 0):
-            self.garments.append(self.garment_randomizer.next())
-            self.next_garment = 10000
+            self.next_garment -= self.ticks
 
-        self.bins.update(delta)
+            if (self.next_garment <= 0):
+                self.garments.append(self.garment_randomizer.next())
+                difficulty_level = self.total_score / 5
+                self.next_garment = 10000 - (difficulty_level * 500)
 
-        for garment in self.garments:
-            garment.update(delta)
+            self.bins.update(delta)
 
-            # Check garment collisions
-            bin = self.bins.garment_check(garment)
+            for garment in self.garments:
+                garment.update(delta)
 
-            if bin:
-                self.on_bin_collision(garment, bin)
+                # Check garment collisions
+                bin = self.bins.garment_check(garment)
 
-            if (self.sock_bin_left_rect.colliderect(garment.rect) or self.sock_bin_right_rect.colliderect(garment.rect)):
-                self.on_sock_bin_collision(garment)
+                if bin:
+                    self.on_bin_collision(garment, bin)
 
-        for coin in self.coins:
-            coin.update(delta)
+                if (self.sock_bin_left_rect.colliderect(garment.rect) or self.sock_bin_right_rect.colliderect(garment.rect)):
+                    self.on_sock_bin_collision(garment)
+
+            for coin in self.coins:
+                coin.update(delta)
 
         self.bins.draw(self.surface)
         self.surface.blit(self.sock_bin_left_image, self.sock_bin_left_rect)
@@ -195,12 +206,16 @@ class GameMain(engine.Screen):
         text = self.font.render(str(self.coin_total), True, engine.Colors.BLACK)
         self.surface.blit(self.coin_icon, pygame.Rect(
             750 - self.coin_icon_rect.width,
-            15,
+            20,
             self.coin_icon_rect.width,
             self.coin_icon_rect.height
         ))
 
-        self.surface.blit(text, (790 - text.get_rect().width, 15, text.get_rect().width, text.get_rect().height))
+        self.surface.blit(text, (790 - text.get_rect().width, 20, text.get_rect().width, text.get_rect().height))
+
+        total_score_text = self.font.render(str(self.total_score), True, engine.Colors.BLACK)
+        self.surface.blit(total_score_text, (620, 20, total_score_text.get_rect().width, total_score_text.get_rect().height))
+        self.surface.blit(self.score_icon, self.score_icon_rect)
 
         multiplier = '1x'
         if self.on_streak:
@@ -210,12 +225,36 @@ class GameMain(engine.Screen):
         self.surface.blit(multiplier_text, (40, 185, multiplier_text.get_rect().width, multiplier_text.get_rect().height))
         self.surface.blit(multiplier_text, (740, 185, multiplier_text.get_rect().width, multiplier_text.get_rect().height))
 
+        for i in range(5):
+            if self.on_streak:
+                color = engine.Colors.GREEN
+            elif i < self.sock_bin_streak:
+                color = engine.Colors.ORANGE
+            else:
+                color = engine.Colors.LIGHT_GREY
+
+            pygame.draw.circle(self.surface, color, (32 + 10 * i, 220), 4)
+            pygame.draw.circle(self.surface, engine.Colors.BLACK, (32 + 10 * i, 220), 4, 1)
+            pygame.draw.circle(self.surface, color, (731 + 10 * i, 220), 4)
+            pygame.draw.circle(self.surface, engine.Colors.BLACK, (731 + 10 * i, 220), 4, 1)
+
+        for (bin, rect) in zip(self.bins.bins, self.bins.bin_rects):
+            score_text = self.font.render(str(self.bin_score[bin]), True, engine.Colors.BLACK)
+            self.surface.blit(score_text, (rect.center[0], rect.center[1] + 30, score_text.get_rect().width, score_text.get_rect().height))
+
+        if self.lives < 0:
+            self.surface.blit(self.game_over_image, self.game_over_rect)
 
         self.kernel.display_surface.blit(self.surface, self.rect)
 
         self.surface.fill(engine.Colors.BLUE)
         
         self.surface.blit(self.background_image, self.background_rect)
+
+    def add_scores(self):
+        for (bin, score) in self.bin_score.iteritems():
+            self.total_score += max(score, 0)
+            self.bin_score[bin] = 0
 
     def on_sock_bin_collision(self, garment):
         if garment.type == 'sock':            
@@ -231,8 +270,6 @@ class GameMain(engine.Screen):
                 self.longest_sock_streak = self.sock_bin_streak
             if self.sock_bin_streak >= 5:
                 self.on_streak = True
-
-        print self.sock_bin_streak, self.on_streak, self.longest_sock_streak
 
     def on_bin_collision(self, garment, bin):
         if garment.type == 'sock' and garment.biohazard == False:
@@ -252,7 +289,7 @@ class GameMain(engine.Screen):
 
             # if biohazard in wrong bin
             else:
-                self.bin_score[bin] -= self.bin_score[bin]/2
+                self.bin_score[bin] -= max(abs(self.bin_score[bin])/2, 1)
                 self.lives -= 1 
 
                 if self.on_streak:

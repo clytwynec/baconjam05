@@ -170,6 +170,9 @@ class GarmentRandomizer:
 
 class Bins:
     def __init__(self, kernel, screen):
+        self.kernel = kernel
+        self.screen = screen
+
         self.bins = [
             'lights',
             'darks',
@@ -211,6 +214,7 @@ class Bins:
     def spin(self):
         # Randomize the order of the bins
         random.shuffle(self.bins)
+        self.screen.add_scores()
 
     def garment_check(self, garment):
         for (bin, rect) in zip(self.bins, self.bin_rects):
@@ -222,7 +226,7 @@ class Bins:
     def update(self, delta):
         self.ticks += delta
 
-        if self.ticks >= self.randomize_time:
+        if self.ticks >= self.randomize_time and not self.screen.current_garment:
             max_counter = 20
 
             t = (self.move_counter / float(max_counter)) * math.pi
