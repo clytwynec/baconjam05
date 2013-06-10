@@ -36,3 +36,5 @@ nosetests.xml
 
 # Project Specific Stuff
 game.log
+build
+dist
