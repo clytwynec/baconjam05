@@ -264,6 +264,16 @@ class GameMain(engine.Screen):
         
         self.surface.blit(self.background_image, self.background_rect)
 
+    def pause(self):
+        engine.Screen.pause(self)
+
+        self.music.stop()
+
+    def resume(self):
+        engine.Screen.resume(self)
+
+        self.music.play(-1)
+
     def add_scores(self):
         for (bin, score) in self.bin_score.iteritems():
             self.total_score += max(score, 0)
@@ -386,7 +396,7 @@ class MainMenu(engine.Screen):
             'NewGame': pygame.Rect(100, 290, 325, 150),
             'GameMain': pygame.Rect(485, 150, 225, 150),
             'Instructions': pygame.Rect(485, 380, 130, 20),
-            'MainMenu': pygame.Rect(485, 402, 80, 20),
+            'Credits': pygame.Rect(485, 402, 80, 20),
             'Exit': pygame.Rect(485, 423, 50, 20)
         }
 
@@ -436,5 +446,29 @@ class Instructions(engine.Screen):
     def update(self, delta):
         self.kernel.display_surface.blit(self.background_image, self.background_rect)
 
-        # for state, rect in self.menu_rects.iteritems():
-        #     pygame.draw.rect(self.kernel.display_surface, engine.Colors.BLUE, rect, 3)
+
+class Credits(engine.Screen):
+    def __init__(self, kernel):
+        engine.Screen.__init__(self, kernel, 'Credits')
+
+        self.background_image, self.background_rect = kernel.image_manager.load("credits.bmp")
+
+        self.menu_rects = {
+            'MainMenu': pygame.Rect(15, 15, 90, 40),
+        }
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for item in self.menu_rects:
+                if (self.menu_rects[item].collidepoint(event.pos)):
+                    if (item == "Exit"):
+                        pygame.quit()
+                        sys.exit()
+                    else:
+                        self.screen_manager.switch_to(item)
+            pass
+
+
+    def update(self, delta):
+        self.kernel.display_surface.blit(self.background_image, self.background_rect)
+
